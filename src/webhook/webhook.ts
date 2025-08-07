@@ -1,6 +1,6 @@
 // src/utils/setupTelegramWebhook.ts
 import axios from 'axios'
-import { TELEGRAM_API, WEBHOOK_PATH } from '../utils'
+import { TELEGRAM_API, WEBHOOK_PATH } from '../utils/const'
 
 
 export const setupTelegramWebhook = async () => {

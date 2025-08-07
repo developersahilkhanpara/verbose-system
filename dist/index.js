@@ -17,15 +17,16 @@ const express_1 = __importDefault(require("express"));
 require("dotenv/config");
 const db_1 = __importDefault(require("./database/db"));
 const axios_1 = require("./config/axios");
-const utils_1 = require("./utils");
-const webhook_1 = require("./config/webhook");
+const const_1 = require("./utils/const");
+const webhook_1 = require("./webhook/webhook");
+const helper_1 = require("./utils/helper");
 exports.app = (0, express_1.default)();
 const port = process.env.PORT || 8000;
 //accept params
 exports.app.use(express_1.default.urlencoded());
 //accept json data
 exports.app.use(express_1.default.json());
-exports.app.post(utils_1.WEBHOOK_PATH, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.app.post(const_1.WEBHOOK_PATH, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const message = req.body.message;
     if (!message)
         return res.sendStatus(200);
@@ -42,6 +43,8 @@ exports.app.post(utils_1.WEBHOOK_PATH, (req, res) => __awaiter(void 0, void 0, v
 (0, db_1.default)().then(() => {
     exports.app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
         console.log(`Server running at http://localhost:${port}`);
+        console.log((0, helper_1.getStableInstanceId)());
+        console.log((0, helper_1.getSystemInfo)());
         (0, webhook_1.setupTelegramWebhook)().then(() => {
             console.log("seted webhook");
         }).catch(error => {
