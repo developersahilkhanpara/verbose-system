@@ -3,8 +3,11 @@ import 'dotenv/config'
 import DBConnect from './database/db';
 import axios from 'axios';
 import { telegramApi } from './config/axios';
+import { WEBHOOK_PATH } from './utils';
+import { setupTelegramWebhook } from './config/webhook';
+import { error } from 'console';
 
-const app = express();
+export const app = express();
 const port = process.env.PORT || 8000;
 
 //accept params
@@ -12,7 +15,6 @@ app.use(express.urlencoded())
 //accept json data
 app.use(express.json())
 
-const WEBHOOK_PATH = '/webhook'
 app.post(WEBHOOK_PATH, async (req, res) => {
   const message = req.body.message
 
@@ -34,6 +36,12 @@ app.post(WEBHOOK_PATH, async (req, res) => {
 DBConnect().then(() => {
   app.listen(port, async () => {
   console.log(`Server running at http://localhost:${port}`);
+
+  setupTelegramWebhook().then(() =>{
+    console.log("seted webhook")
+  }).catch(error =>{
+    console.log("webhook error",error)
+  })
 });
 }).catch(error => {
   console.log(error)
